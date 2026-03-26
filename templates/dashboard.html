@@ -1,0 +1,212 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard | Finance AI{% endblock %}
+
+{% block content %}
+<div class="row align-items-center mb-5">
+    <div class="col-md-6">
+        <h2 class="fw-bold mb-1">Financial Intelligence</h2>
+        <p class="text-muted">Real-time overview of your wealth and habits.</p>
+    </div>
+    <div class="col-md-6 text-md-end">
+        <div class="btn-group shadow-sm">
+            <a href="{% url 'income-add' %}" class="btn btn-success btn-sm"><i class="bi bi-plus-lg me-1"></i> Income</a>
+            <a href="{% url 'expense-add' %}" class="btn btn-danger btn-sm"><i class="bi bi-dash-lg me-1"></i> Expense</a>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mb-5">
+    <!-- Total Income Card -->
+    <div class="col-md-3">
+        <div class="card h-100 p-3">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="p-2 bg-success bg-opacity-10 rounded-3 text-success">
+                        <i class="bi bi-graph-up-arrow fs-4"></i>
+                    </div>
+                    <span class="badge bg-success bg-opacity-10 text-success rounded-pill small">+12%</span>
+                </div>
+                <h6 class="text-muted small fw-semibold uppercase tracking-wider mb-1">TOTAL INCOME</h6>
+                <h2 class="fw-bold mb-0">₹{{ data.total_income }}</h2>
+            </div>
+        </div>
+    </div>
+    <!-- Total Expenses Card -->
+    <div class="col-md-3">
+        <div class="card h-100 p-3">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="p-2 bg-danger bg-opacity-10 rounded-3 text-danger">
+                        <i class="bi bi-graph-down-arrow fs-4"></i>
+                    </div>
+                    <span class="badge bg-danger bg-opacity-10 text-danger rounded-pill small">-5%</span>
+                </div>
+                <h6 class="text-muted small fw-semibold tracking-wider mb-1">TOTAL EXPENSES</h6>
+                <h2 class="fw-bold mb-0 text-danger-emphasis">₹{{ data.total_expenses }}</h2>
+            </div>
+        </div>
+    </div>
+    <!-- Net Savings Card -->
+    <div class="col-md-3">
+        <div class="card h-100 p-3" style="background: rgba(99, 102, 241, 0.1);">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-center mb-3">
+                    <div class="p-2 bg-primary bg-opacity-20 rounded-3 text-primary">
+                        <i class="bi bi-wallet2 fs-4"></i>
+                    </div>
+                </div>
+                <h6 class="text-muted small fw-semibold tracking-wider mb-1 text-primary">NET SAVINGS</h6>
+                <h2 class="fw-bold mb-0 text-primary-emphasis">₹{{ data.savings }}</h2>
+            </div>
+        </div>
+    </div>
+    <!-- Savings Rate Card -->
+    <div class="col-md-3">
+        <div class="card h-100 p-3">
+            <div class="card-body text-center">
+                <div class="position-relative d-inline-block">
+                    <div class="progress rounded-circle" style="width: 80px; height: 80px; background: none; border: 6px solid #334155;">
+                        <div class="progress-bar rounded-circle" role="progressbar" style="width: {{ data.savings_rate }}%; background: #a855f7;"></div>
+                    </div>
+                    <div class="position-absolute top-50 start-50 translate-middle fw-bold small">
+                        {{ data.savings_rate }}%
+                    </div>
+                </div>
+                <h6 class="text-muted small fw-semibold tracking-wider mt-3 mb-0">SAVINGS RATE</h6>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4">
+    <div class="col-lg-8">
+        <div class="card h-100 p-4">
+            <div class="card-header bg-transparent border-0 d-flex justify-content-between align-items-center p-0 mb-4">
+                <h5 class="fw-bold mb-0">Expense Breakdown</h5>
+                <div class="dropdown">
+                    <button class="btn btn-sm btn-outline-secondary rounded-pill px-3" type="button">Monthly</button>
+                </div>
+            </div>
+            <div class="card-body p-0" style="min-height: 400px;">
+                <canvas id="expenseChart"></canvas>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-4">
+        <div class="card h-100 p-4">
+            <h5 class="fw-bold mb-4">Financial Insights</h5>
+            <div class="overflow-auto" style="max-height: 400px;">
+                {% for recommendation in recommendations %}
+                <div class="p-3 mb-3 rounded-4 bg-primary bg-opacity-10 border border-primary border-opacity-10 animate-fade-in">
+                    <div class="d-flex gap-3">
+                        <div class="text-primary"><i class="bi bi-lightbulb-fill fs-5"></i></div>
+                        <p class="small mb-0">{{ recommendation }}</p>
+                    </div>
+                </div>
+                {% empty %}
+                <p class="text-muted small">Record more data to unlock personalized AI insights.</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row g-4 mt-2">
+    <div class="col-lg-12">
+        <div class="card p-4">
+            <h5 class="fw-bold mb-4">Categories</h5>
+            <div class="row g-3">
+                {% for item in data.expense_breakdown %}
+                {% cycle "99, 102, 241" "168, 85, 247" "236, 72, 153" "239, 68, 68" "245, 158, 11" "16, 185, 129" "6, 182, 212" as rgb_val silent %}
+                <div class="col-md-3">
+                    <div class="p-3 rounded-4 border animate-fade-in" 
+                         style="background: rgba({{ rgb_val }}, 0.08); border-color: rgba({{ rgb_val }}, 0.2) !important; transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1); cursor: default;"
+                         onmouseover="this.style.background='rgba({{ rgb_val }}, 0.15)'; this.style.transform='translateY(-5px)'; this.style.boxShadow='0 10px 20px rgba({{ rgb_val }}, 0.1)'"
+                         onmouseout="this.style.background='rgba({{ rgb_val }}, 0.08)'; this.style.transform='translateY(0)'; this.style.boxShadow='none'">
+                        <div class="d-flex justify-content-between align-items-center mb-2">
+                            <span class="small text-uppercase fw-bold" style="color: rgb({{ rgb_val }}); letter-spacing: 0.5px;">{{ item.category }}</span>
+                            <span style="color: rgb({{ rgb_val }}); opacity: 0.8;"><i class="bi bi-shield-check"></i></span>
+                        </div>
+                        <h3 class="fw-bold mb-0">₹{{ item.total }}</h3>
+                    </div>
+                </div>
+                {% empty %}
+                <div class="col-12 text-center py-5 text-muted small">
+                    <div class="p-4 rounded-4 bg-light bg-opacity-5 border border-dashed">
+                        <i class="bi bi-inbox d-block fs-2 mb-2 opacity-50"></i> 
+                        No category data available yet. Start by adding some expenses!
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const categories = [];
+        const totals = [];
+        
+        {% for item in data.expense_breakdown %}
+            categories.push("{{ item.category|title }}");
+            totals.push({{ item.total }});
+        {% endfor %}
+
+        const ctx = document.getElementById('expenseChart').getContext('2d');
+        
+        // Custom colors for premium look
+        const colors = [
+            '#6366f1', // Indigo
+            '#a855f7', // Purple
+            '#ec4899', // Pink
+            '#ef4444', // Red
+            '#f59e0b', // Amber
+            '#10b981', // Emerald
+            '#06b6d4'  // Cyan
+        ];
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: categories,
+                datasets: [{
+                    label: 'Amount Spend',
+                    data: totals,
+                    backgroundColor: colors,
+                    borderRadius: 8,
+                    barThickness: 30,
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#1e293b',
+                        padding: 12,
+                        cornerRadius: 8,
+                        titleFont: { size: 14, weight: 'bold' }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        grid: { color: 'rgba(255,255,255,0.05)' },
+                        ticks: { color: '#94a3b8' }
+                    },
+                    x: {
+                        grid: { display: false },
+                        ticks: { color: '#94a3b8' }
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}

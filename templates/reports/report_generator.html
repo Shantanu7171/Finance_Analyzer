@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+{% block title %}Report Engine | Finance AI{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-10 col-lg-8">
+        <div class="mb-5 text-center">
+            <h2 class="fw-bold mb-1 text-white">Financial Intelligence Exports</h2>
+            <p class="text-light-emphasis">High-fidelity reports for deep analysis and strategy.</p>
+        </div>
+
+        <div class="card border-light border-opacity-25 shadow-lg animate-fade-in mb-5 overflow-hidden bg-dark text-white bg-opacity-25">
+            <div class="card-header bg-dark bg-opacity-50 border-light border-opacity-25 p-4">
+                <h5 class="mb-0 fw-bold d-flex align-items-center gap-2">
+                    <i class="bi bi-file-earmark-bar-graph text-primary"></i> Monthly Performance Review
+                </h5>
+            </div>
+            <div class="card-body p-5">
+                <form action="{% url 'monthly-report' %}" method="get" id="reportForm">
+                    <div class="row g-4 align-items-end mb-5">
+                        <div class="col-md-4">
+                            <label for="yearSelect" class="form-label small fw-bold text-light-emphasis text-uppercase">Year Index</label>
+                            <select name="year" id="yearSelect" class="form-select form-select-lg rounded-3 bg-dark text-white border-secondary border-opacity-50">
+                                {% for y in years %}
+                                <option value="{{ y }}" {% if y == current_year %}selected{% endif %}>{{ y }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="monthSelect" class="form-label small fw-bold text-light-emphasis text-uppercase">Monthly Cycle</label>
+                            <select name="month" id="monthSelect" class="form-select form-select-lg rounded-3 bg-dark text-white border-secondary border-opacity-50">
+                                {% for m_val, m_name in months %}
+                                <option value="{{ m_val }}" {% if m_val == current_month %}selected{% endif %}>{{ m_name }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="formatSelect" class="form-label small fw-bold text-muted text-uppercase">Protocol</label>
+                            <select name="output_format" id="formatSelect" class="form-select form-select-lg rounded-3">
+                                <option value="json">Data Stream (JSON)</option>
+                                <option value="pdf">Professional Doc (PDF)</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid">
+                        <button type="submit" class="btn btn-primary btn-lg py-3 fw-bold">
+                            <i class="bi bi-cpu-fill me-2"></i> Compute & Export Report
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="row g-4 opacity-75">
+            <div class="col-md-6">
+                <div class="card bg-secondary bg-opacity-5 border-0 h-100 p-4">
+                    <h6 class="fw-bold mb-3 d-flex align-items-center gap-2">
+                        <i class="bi bi-code-slash text-primary"></i> Machine Metrics
+                    </h6>
+                    <p class="small text-muted mb-0">Direct JSON access to nested telemetry across income streams and category-specific burn rates.</p>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="card bg-secondary bg-opacity-5 border-0 h-100 p-4">
+                    <h6 class="fw-bold mb-3 d-flex align-items-center gap-2">
+                        <i class="bi bi-file-pdf text-danger"></i> Human-Readable PDF
+                    </h6>
+                    <p class="small text-muted mb-0">Branded, vector-optimized PDF artifacts suitable for archival or external financial review.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

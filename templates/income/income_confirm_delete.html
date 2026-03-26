@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+{% block title %}Delete Income - Finance Analyzer{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-6 mt-5">
+        <div class="card shadow-sm border-danger">
+            <div class="card-header bg-danger text-white">
+                <h5 class="mb-0">Confirm Delete</h5>
+            </div>
+            <div class="card-body text-center py-4">
+                <p class="fs-5">Are you sure you want to delete the income <br><strong>"{{ object.source }}"</strong> for <strong>₹{{ object.amount }}</strong>?</p>
+                <form method="post" class="mt-4">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger px-4 mx-2">Yes, Delete</button>
+                    <a href="{% url 'income-list' %}" class="btn btn-secondary px-4 mx-2">Cancel</a>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'base.html' %}
+{% block title %}{% if object %}Edit{% else %}Add{% endif %} Income - Finance AI{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="card shadow-sm border-0 mt-4">
+            <div class="card-header bg-white border-0 pt-4 pb-0 text-center">
+                <h4 class="fw-bold mb-0">{% if object %}Edit{% else %}Add{% endif %} Income Source</h4>
+            </div>
+            <div class="card-body p-4 pt-4">
+                <form method="post">
+                    {% csrf_token %}
+                    {% for field in form %}
+                        <div class="mb-4">
+                            <label class="form-label fw-bold small text-muted text-uppercase tracking-wider">{{ field.label }}</label>
+                            {{ field }}
+                            {% if field.help_text %}
+                                <div class="form-text mt-1 small opacity-75">{{ field.help_text }}</div>
+                            {% endif %}
+                            {% for error in field.errors %}
+                                <div class="text-danger small mt-1 animate-fade-in"><i class="bi bi-exclamation-circle me-1"></i>{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+                    <div class="d-grid gap-3 mt-5">
+                        <button type="submit" class="btn btn-primary btn-lg fw-bold">
+                            <i class="bi bi-check2-circle me-2"></i> Save Income Record
+                        </button>
+                        <a href="{% url 'income-list' %}" class="btn btn-outline-secondary border-0">Cancel</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

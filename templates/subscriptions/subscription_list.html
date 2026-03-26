@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Subscriptions - Finance Analyzer{% endblock %}
+{% block content %}
+<h2 class="mb-4">Detected Subscriptions</h2>
+<p class="text-muted mb-4">We've identified these recurring expenses as potential subscriptions based on your spending history.</p>
+
+<div class="row">
+    {% for sub in subscriptions %}
+    <div class="col-md-4 mb-4">
+        <div class="card h-100 shadow-sm border-0">
+            <div class="card-body">
+                <div class="d-flex justify-content-between align-items-start mb-2">
+                    <h5 class="card-title mb-0 fw-bold">{{ sub.name }}</h5>
+                    <span class="badge bg-info text-dark">Detected</span>
+                </div>
+                <h3 class="text-primary mb-3">₹{{ sub.amount }}</h3>
+                <p class="card-text mb-1"><small class="text-muted">Category: {{ sub.category|title }}</small></p>
+                <p class="card-text"><small class="text-muted">Occurrences: {{ sub.occurrences }} times</small></p>
+            </div>
+            <div class="card-footer bg-white border-0 pb-3">
+                <div class="d-grid">
+                    <a href="{% url 'subscription-detail' %}?description={{ sub.raw_description|urlencode }}&amount={{ sub.amount }}&category={{ sub.category }}" class="btn btn-sm btn-outline-primary">View Details</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center py-5">
+        <div class="mb-3">
+            <svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" fill="currentColor" class="bi bi-calendar-event text-muted" viewBox="0 0 16 16">
+                <path d="M11 6.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v1a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5z"/>
+                <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
+            </svg>
+        </div>
+        <h4 class="text-muted">No recurring subscriptions detected yet.</h4>
+        <p class="text-muted">Keep recording your expenses, and we'll automatically find patterns!</p>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

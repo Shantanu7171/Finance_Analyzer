@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block title %}Login - Finance Analyzer{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-6 col-lg-4">
+        <div class="card shadow border-0">
+            <div class="card-header bg-primary text-white text-center py-4">
+                <h3 class="mb-0">Welcome Back</h3>
+                <p class="mb-0 small opacity-75">Sign in to manage your finances</p>
+            </div>
+            <div class="card-body p-4">
+                {% if form.errors %}
+                <div class="alert alert-danger py-2 small">
+                    Invalid email or password. Please try again.
+                </div>
+                {% endif %}
+
+                <form method="post" action="{% url 'login' %}">
+                    {% csrf_token %}
+                    
+                    <div class="mb-3">
+                        <label for="id_username" class="form-label fw-bold">Email Address</label>
+                        <input type="email" name="username" class="form-control form-control-lg" id="id_username" placeholder="name@example.com" required autofocus>
+                    </div>
+                    
+                    <div class="mb-3">
+                        <label for="id_password" class="form-label fw-bold">Password</label>
+                        <input type="password" name="password" class="form-control form-control-lg" id="id_password" placeholder="••••••••" required>
+                    </div>
+                    
+                    <input type="hidden" name="next" value="{{ next|default:'/' }}" />
+                    
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg">Login</button>
+                    </div>
+                </form>
+                <div class="mt-4 text-center">
+                    <p class="text-muted small">Don't have an account? <a href="{% url 'register' %}" class="text-primary fw-bold text-decoration-none">Create one here</a></p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

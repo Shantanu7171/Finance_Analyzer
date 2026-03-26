@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% block title %}Import Bank Statement - Finance Analyzer{% endblock %}
+{% block content %}
+<div class="row justify-content-center ">
+    <div class="col-md-8 col-lg-6 ">
+        <div class="card shadow-sm border-0 mt-4">
+            <div class="card-header bg-light border-0 pt-4 pb-0 text-center text-black">
+                <div class="mb-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" fill="currentColor" class="bi bi-file-earmark-spreadsheet text-primary" viewBox="0 0 16 16">
+                        <path d="M14 14V4.5L9.5 0H4a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2M9.5 3A1.5 1.5 0 0 0 11 4.5h2V14a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1h5.5z"/>
+                        <path d="M3 13h10v1H3zm0-2h10v1H3zm0-2h10v1H3zm0-2h10v1H3zm0-2h10v1H3z"/>
+                    </svg>
+                </div>
+                <h4 class="mb-0 text-black">Import Bank Statement</h4>
+                <p class="small mt-2 text-black">Upload your CSV file to automatically categorize expenses and income.</p>
+            </div>
+            <div class="card-body mt-3">
+                {% if messages %}
+                    {% for message in messages %}
+                        <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    {% endfor %}
+                {% endif %}
+
+                <form method="post" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="mb-4">
+                        <label for="bankFile" class="form-label fw-bold">Select CSV File</label>
+                        <input class="form-control" type="file" id="bankFile" name="file" accept=".csv" required>
+                        <div class="form-text mt-2">
+                            <small>Format required: Date, Description, Amount</small>
+                        </div>
+                    </div>
+                    
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-primary d-flex align-items-center justify-content-center gap-2">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-upload" viewBox="0 0 16 16">
+                                <path d="M.5 9.9a.5.5 0 0 1 .5.5v2.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-2.5a.5.5 0 0 1 1 0v2.5a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2v-2.5a.5.5 0 0 1 .5-.5"/>
+                                <path d="M7.646 1.146a.5.5 0 0 1 .708 0l3 3a.5.5 0 0 1-.708.708L8.5 2.707V11.5a.5.5 0 0 1-1 0V2.707L5.354 4.854a.5.5 0 1 1-.708-.708z"/>
+                            </svg>
+                            Process Statement
+                        </button>
+                        <a href="{% url 'dashboard' %}" class="btn btn-outline-secondary">Go to Dashboard</a>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="mt-4 p-3 bg-light rounded shadow-sm">
+            <h6 class="fw-bold"><i class="bi bi-info-circle me-2"></i>How it works</h6>
+            <p class=" mb-0 text-black text-italic">Our AI engine will analyze each row. Positive amounts are recorded as Income, and negative amounts are automatically categorized into Food, Transport, Bills, etc., based on the description keywords.</p>
+        </div>
+    </div>
+</div>
+{% endblock %}

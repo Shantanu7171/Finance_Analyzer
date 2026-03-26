@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}Subscription Detail - Finance Analyzer{% endblock %}
+{% block content %}
+<nav aria-label="breadcrumb">
+  <ol class="breadcrumb">
+    <li class="breadcrumb-item"><a href="{% url 'subscription-list' %}">Subscriptions</a></li>
+    <li class="breadcrumb-item active" aria-current="page">Details</li>
+  </ol>
+</nav>
+
+<div class="card shadow-sm border-0 mb-4">
+    <div class="card-body p-4">
+        <h2 class="fw-bold mb-1">{{ description }}</h2>
+        <div class="d-flex align-items-center gap-3 mt-3">
+            <h3 class="text-primary mb-0">₹{{ amount }}</h3>
+            <span class="badge bg-secondary">{{ category|title }}</span>
+        </div>
+    </div>
+</div>
+
+<h4 class="mb-3">Transaction History</h4>
+<div class="card shadow-sm border-0 overflow-hidden">
+    <div class="table-responsive">
+        <table class="table table-hover mb-0">
+            <thead class="bg-light">
+                <tr>
+                    <th class="ps-4">Date</th>
+                    <th>Category</th>
+                    <th class="text-end pe-4">Amount</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for expense in expenses %}
+                <tr>
+                    <td class="ps-4">{{ expense.date }}</td>
+                    <td>{{ expense.category|title }}</td>
+                    <td class="text-end pe-4">₹{{ expense.amount }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+{% endblock %}

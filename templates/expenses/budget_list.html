@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Budgets - Finance Analyzer{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Monthly Budgets</h2>
+    <a href="{% url 'budget-add' %}" class="btn btn-primary">Set New Budget</a>
+</div>
+
+<div class="card shadow-sm border-0">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th>Category</th>
+                        <th>Monthly Limit</th>
+                        <th class="text-end">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for budget in budgets %}
+                    <tr>
+                        <td class="align-middle fw-bold">{{ budget.get_category_display }}</td>
+                        <td class="align-middle">₹{{ budget.monthly_limit }}</td>
+                        <td class="text-end align-middle">
+                            <a href="{% url 'budget-edit' budget.id %}" class="btn btn-sm btn-outline-primary">Edit</a>
+                            <a href="{% url 'budget-delete' budget.id %}" class="btn btn-sm btn-outline-danger">Delete</a>
+                        </td>
+                    </tr>
+                    {% empty %}
+                    <tr>
+                        <td colspan="3" class="text-center py-4 text-muted">No budgets set. Click "Set New Budget" to create one!</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}
